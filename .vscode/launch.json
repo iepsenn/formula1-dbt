@@ -1,0 +1,29 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "dbt: run",
+            "request": "launch",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "program": "${cwd}/.vscode/run_container.py",
+            "args": [
+                "dbt",
+                "run"
+            ],
+            "type": "python"
+        },
+        {
+            "name": "dbt: test",
+            "request": "launch",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "program": "${cwd}/.vscode/run_container.py",
+            "args": [
+                "dbt",
+                "test"
+            ],
+            "type": "python"
+        }
+    ]
+}
