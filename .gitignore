@@ -1,2 +1,4 @@
 .logs/
 .postgres/
+.data/*.csv
+*.csv

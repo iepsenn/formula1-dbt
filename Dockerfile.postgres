@@ -1,9 +1,8 @@
 FROM postgres:13.11-bullseye
 
-ADD scripts/ddl.sql /docker-entrypoint-initdb.d
+COPY data/. /tmp/data/.
+
+ADD scripts/initdb.sql /docker-entrypoint-initdb.d
 RUN chmod a+r /docker-entrypoint-initdb.d/*
 
 WORKDIR /tmp
-
-RUN mkdir -p /tmp/csv_data
-COPY scripts/load_data.sql /tmp/.

@@ -6,8 +6,7 @@ RUN apt-get update \
 RUN pip3 install -U tox wheel six setuptools
 RUN pip3 install dbt-postgres
 
-RUN mkdir /usr/app 
-# RUN mkdir /home/tox 
+RUN mkdir /usr/app
 
 WORKDIR /usr/app
 VOLUME /usr/app

@@ -1,36 +1,39 @@
--------------------------------------------------------
--- DIMENSIONS
--------------------------------------------------------
-
--- circuitId,circuitRef,name,location,country,lat,lng,alt,url -> circuits
 CREATE TABLE circuits (
     ID INTEGER NOT NULL,
     circuitRef VARCHAR(30) NOT NULL,
     name VARCHAR(70) NOT NULL,
-    location INTEGER NOT NULL,
+    location VARCHAR(70) NOT NULL,
     country VARCHAR(30) NOT NULL,
     lat DOUBLE PRECISION NOT NULL,
     lng DOUBLE PRECISION NOT NULL,
-    alt DOUBLE PRECISION DEFAULT NULL,
+    alt VARCHAR(10) DEFAULT NULL,
     url VARCHAR(100) NOT NULL,
     CONSTRAINT circuits_pk PRIMARY KEY(ID)
 );
 
--- raceId,year,round,circuitId,name,date,time,url -> races
 CREATE TABLE races (
     ID INTEGER NOT NULL,
     year INTEGER NOT NULL,
     round INTEGER NOT NULL,
     circuitId INTEGER NOT NULL,
     name VARCHAR(70) NOT NULL,
-    date DATE NOT NULL,
-    time TIME NOT NULL,
+    date VARCHAR(10) DEFAULT NULL,
+    time VARCHAR(8) DEFAULT NULL,
     url VARCHAR(100) NOT NULL,
+    fp1_date VARCHAR(10) DEFAULT NULL,
+    fp1_time VARCHAR(10) DEFAULT NULL,
+    fp2_date VARCHAR(10) DEFAULT NULL,
+    fp2_time VARCHAR(10) DEFAULT NULL,
+    fp3_date VARCHAR(10) DEFAULT NULL,
+    fp3_time VARCHAR(10) DEFAULT NULL,
+    quali_date VARCHAR(10) DEFAULT NULL,
+    quali_time VARCHAR(10) DEFAULT NULL,
+    sprint_date VARCHAR(10) DEFAULT NULL,
+    sprint_time VARCHAR(10) DEFAULT NULL,
     CONSTRAINT races_pk PRIMARY KEY(ID),
     CONSTRAINT races_circuits_fk FOREIGN KEY(circuitId) REFERENCES circuits(ID)
 );
 
---constructorId,constructorRef,name,nationality,url, -> constructors
 CREATE TABLE constructors (
     ID INTEGER NOT NULL,
     constructorRef VARCHAR(30) NOT NULL,
@@ -40,11 +43,10 @@ CREATE TABLE constructors (
     CONSTRAINT constructors_pk PRIMARY KEY(ID)
 );
 
--- driverId,driverRef,number,code,forename,surname,dob,nationality,url -> drivers
 CREATE TABLE drivers (
     ID INTEGER NOT NULL,
     driverRef VARCHAR(30) NOT NULL,
-    number INTEGER DEFAULT NULL,
+    number VARCHAR(3) DEFAULT NULL,
     code VARCHAR(3) DEFAULT NULL,
     forename VARCHAR(30) NOT NULL,
     surname VARCHAR(30) NOT NULL,
@@ -54,65 +56,55 @@ CREATE TABLE drivers (
     CONSTRAINT drivers_pk PRIMARY KEY(ID)
 );
 
--- year,url -> seasons
 CREATE TABLE seasons (
     year INTEGER NOT NULL,
     url VARCHAR(100) NOT NULL,
     CONSTRAINT seasons_pk PRIMARY KEY(year)
 );
 
--- statusId,status -> status
 CREATE TABLE status (
     ID INTEGER NOT NULL,
     status VARCHAR(30) NOT NULL,
     CONSTRAINT status_pk PRIMARY KEY(ID)
 );
 
--------------------------------------------------------
--- FACTS
--------------------------------------------------------
-
--- constructorResultsId,raceId,constructorId,points,status -> constructorResults
 CREATE TABLE constructorResults (
     ID INTEGER NOT NULL,
     raceId INTEGER NOT NULL,
     constructorId INTEGER NOT NULL,
-    points INTEGER NOT NULL,
+    points DOUBLE PRECISION NOT NULL,
     status VARCHAR(30) DEFAULT NULL,
     CONSTRAINT constructorResults_pk PRIMARY KEY(ID, raceId, constructorId),
     CONSTRAINT constructorResults_races_fk FOREIGN KEY(raceId) REFERENCES races(ID),
     CONSTRAINT constructorResults_constructors_fk FOREIGN KEY(constructorId) REFERENCES constructors(ID)
 );
 
--- constructorStandingsId,raceId,constructorId,points,position,positionText,wins, -> contructorStandings
-CREATE TABLE contructorStandings (
+CREATE TABLE constructorStandings (
     ID INTEGER NOT NULL,
     raceId INTEGER NOT NULL,
     constructorId INTEGER NOT NULL,
-    points INTEGER NOT NULL,
+    points DOUBLE PRECISION NOT NULL,
     position INTEGER NOT NULL,
     positionText VARCHAR(2) NOT NULL,
     wins INTEGER NOT NULL,
-    CONSTRAINT contructorStandings_pk PRIMARY KEY(ID, raceId, constructorId),
-    CONSTRAINT contructorStandings_races_fk FOREIGN KEY(raceId) REFERENCES races(ID),
-    CONSTRAINT contructorStandings_constructors_fk FOREIGN KEY(constructorId) REFERENCES constructors(ID)
+    CONSTRAINT constructorStandings_pk PRIMARY KEY(ID, raceId, constructorId),
+    CONSTRAINT constructorStandings_races_fk FOREIGN KEY(raceId) REFERENCES races(ID),
+    CONSTRAINT constructorStandings_constructors_fk FOREIGN KEY(constructorId) REFERENCES constructors(ID)
 );
 
--- driverStandingsId,raceId,driverId,points,position,positionText,wins -> driverStandings
 CREATE TABLE driverStandings (
     ID INTEGER NOT NULL,
     raceId INTEGER NOT NULL,
     driverId INTEGER NOT NULL,
-    points INTEGER NOT NULL,
+    points DOUBLE PRECISION NOT NULL,
     position INTEGER NOT NULL,
-    positionText VARCHAR(2) NOT NULL,
+    positionText VARCHAR(3) NOT NULL,
     wins INTEGER NOT NULL,
     CONSTRAINT driverStandings_pk PRIMARY KEY(ID, raceId, driverId),
     CONSTRAINT driverStandings_races_fk FOREIGN KEY(raceId) REFERENCES races(ID),
     CONSTRAINT driverStandings_drivers_fk FOREIGN KEY(driverId) REFERENCES drivers(ID)
 );
 
--- raceId,driverId,lap,position,time,milliseconds -> lapTimes
 CREATE TABLE lapTimes (
     raceId INTEGER NOT NULL,
     driverId INTEGER NOT NULL,
@@ -120,26 +112,24 @@ CREATE TABLE lapTimes (
     position INTEGER NOT NULL,
     time VARCHAR(20) DEFAULT NULL,
     milliseconds INTEGER NOT NULL,
-    CONSTRAINT lapTimes_pk PRIMARY KEY(raceId, driverId),
+    CONSTRAINT lapTimes_pk PRIMARY KEY(raceId, driverId, lap),
     CONSTRAINT lapTimes_races_fk FOREIGN KEY(raceId) REFERENCES races(ID),
     CONSTRAINT lapTimes_drivers_fk FOREIGN KEY(driverId) REFERENCES drivers(ID)
 );
 
--- raceId,driverId,stop,lap,time,duration,milliseconds -> pitStops
 CREATE TABLE pitStops (
     raceId INTEGER NOT NULL,
     driverId INTEGER NOT NULL,
     stop INTEGER NOT NULL,
     lap INTEGER NOT NULL,
     time VARCHAR(20) DEFAULT NULL,
-    duration DOUBLE PRECISION NOT NULL,
+    duration VARCHAR(15) DEFAULT NULL,
     milliseconds INTEGER NOT NULL,
-    CONSTRAINT pitStops_pk PRIMARY KEY(raceId, driverId),
+    CONSTRAINT pitStops_pk PRIMARY KEY(raceId, driverId, lap),
     CONSTRAINT pitStops_races_fk FOREIGN KEY(raceId) REFERENCES races(ID),
     CONSTRAINT pitStops_drivers_fk FOREIGN KEY(driverId) REFERENCES drivers(ID)
 );
 
--- qualifyId,raceId,driverId,constructorId,number,position,q1,q2,q3 -> qualifying
 CREATE TABLE qualifying (
     ID INTEGER NOT NULL,
     raceId INTEGER NOT NULL,
@@ -156,23 +146,22 @@ CREATE TABLE qualifying (
     CONSTRAINT qualifying_constructors_fk FOREIGN KEY(constructorId) REFERENCES constructors(ID)
 );
 
--- rank,fastestLapTime,fastestLapSpeed,statusId -> results
 CREATE TABLE results (
     ID INTEGER NOT NULL,
     raceId INTEGER NOT NULL,
     driverId INTEGER NOT NULL,
     constructorId INTEGER NOT NULL,
-    number INTEGER NOT NULL,
+    number VARCHAR(3) DEFAULT NULL,
     grid INTEGER NOT NULL,
-    position INTEGER DEFAULT NULL,
-    positionText VARCHAR(2) DEFAULT NULL,
+    position VARCHAR(3) DEFAULT NULL,
+    positionText VARCHAR(3) DEFAULT NULL,
     positionOrder INTEGER NOT NULL,
-    points INTEGER NOT NULL,
+    points DOUBLE PRECISION NOT NULL,
     laps INTEGER NOT NULL,
     time VARCHAR(20) DEFAULT NULL,
-    milliseconds INTEGER NOT NULL,
+    milliseconds VARCHAR(10) DEFAULT NULL,
     fastestLap VARCHAR(20) DEFAULT NULL,
-    rank INTEGER NOT NULL,
+    rank VARCHAR(3) DEFAULT NULL,
     fastestLapTime VARCHAR(20) DEFAULT NULL,
     fastestLapSpeed VARCHAR(20) DEFAULT NULL,
     statusId INTEGER NOT NULL,
@@ -181,4 +170,28 @@ CREATE TABLE results (
     CONSTRAINT results_drivers_fk FOREIGN KEY(driverId) REFERENCES drivers(ID),
     CONSTRAINT results_constructors_fk FOREIGN KEY(constructorId) REFERENCES constructors(ID),
     CONSTRAINT results_status_fk FOREIGN KEY(statusId) REFERENCES status(ID)
+);
+
+CREATE TABLE sprintResults (
+    ID INTEGER NOT NULL,
+    raceId INTEGER NOT NULL,
+    driverId INTEGER NOT NULL,
+    constructorId INTEGER NOT NULL,
+    number VARCHAR(3) DEFAULT NULL,
+    grid INTEGER NOT NULL,
+    position VARCHAR(3) DEFAULT NULL,
+    positionText VARCHAR(3) DEFAULT NULL,
+    positionOrder INTEGER NOT NULL,
+    points INTEGER NOT NULL,
+    laps INTEGER NOT NULL,
+    time VARCHAR(20) DEFAULT NULL,
+    milliseconds VARCHAR(10) DEFAULT NULL,
+    fastestLap VARCHAR(20) DEFAULT NULL,
+    fastestLapTime VARCHAR(20) DEFAULT NULL,
+    statusId INTEGER NOT NULL,
+    CONSTRAINT sprintResults_pk PRIMARY KEY(ID, raceId, driverId, constructorId),
+    CONSTRAINT sprintResults_races_fk FOREIGN KEY(raceId) REFERENCES races(ID),
+    CONSTRAINT sprintResults_drivers_fk FOREIGN KEY(driverId) REFERENCES drivers(ID),
+    CONSTRAINT sprintResults_constructors_fk FOREIGN KEY(constructorId) REFERENCES constructors(ID),
+    CONSTRAINT sprintResults_status_fk FOREIGN KEY(statusId) REFERENCES status(ID)
 );
