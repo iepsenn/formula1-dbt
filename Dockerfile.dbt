@@ -1,0 +1,18 @@
+FROM ubuntu:22.04
+
+RUN apt-get update \
+    && apt-get install -y python3-pip
+
+RUN pip3 install -U tox wheel six setuptools
+RUN pip3 install dbt-postgres
+
+RUN mkdir /usr/app 
+# RUN mkdir /home/tox 
+
+WORKDIR /usr/app
+VOLUME /usr/app
+
+ENV PYTHONIOENCODING=utf-8
+ENV LANG C.UTF-8
+
+CMD [ "tail", "-f", "/dev/null"]

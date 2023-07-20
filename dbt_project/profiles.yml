@@ -6,19 +6,19 @@ dbt_project:
       threads: 2
       host: "postgres"
       port: 5432
-      user: "lukas"
-      pass: "senha"
-      dbname: "lukas"
-      schema: "test"
+      user: "{{ env_var('POSTGRES_USER') }}"
+      pass: "{{ env_var('POSTGRES_PASSWORD') }}"
+      dbname: "{{ env_var('POSTGRES_DB') }}"
+      schema: "public"
 
     prod:
       type: postgres
-      threads: 2
+      threads: 4
       host: "postgres"
       port: 5432
-      user: "lukas"
-      pass: "senha"
-      dbname: "lukas"
-      schema: "test"
+      user: "{{ env_var('POSTGRES_USER') }}"
+      pass: "{{ env_var('POSTGRES_PASSWORD') }}"
+      dbname: "{{ env_var('POSTGRES_DB') }}"
+      schema: "public"
 
   target: dev
