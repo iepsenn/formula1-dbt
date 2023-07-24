@@ -3,9 +3,7 @@ version: '3.1'
 services:
 
   postgres:
-    build:
-      context: .
-      dockerfile: Dockerfile.postgres
+    image: postgres:13.11-bullseye
     container_name: postgres
     restart: on-failure
     ports:
@@ -39,10 +37,11 @@ services:
       - backend
     depends_on:
       - postgres
+    env_file:
+      - .env
     volumes:
       - ./dbt_project:/usr/app/
-      - ./logs:/usr/app/logs
-      - /home/lukas/repositories/dbt/profiles.yml=/root/.dbt/
+      - ./data:/usr/app/seeds/
 
 volumes:
   postgres:
