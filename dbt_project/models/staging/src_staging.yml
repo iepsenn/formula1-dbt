@@ -1,0 +1,20 @@
+version: 2
+
+sources:
+  - name: staging
+    database: f1
+    schema: raw
+    tables:
+      - name: circuits
+      - name: lap_times
+      - name: qualifying
+      - name: status
+      - name: constructors
+      - name: drivers
+      - name: races
+      - name: pit_stops
+      - name: driver_standings
+      - name: constructor_standings
+      - name: constructor_results
+      - name: results
+      - name: sprint_results

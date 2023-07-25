@@ -9,7 +9,7 @@ dbt_project:
       user: "{{ env_var('POSTGRES_USER') }}"
       pass: "{{ env_var('POSTGRES_PASSWORD') }}"
       dbname: "{{ env_var('POSTGRES_DB') }}"
-      schema: "public"
+      schema: "raw"
 
     prod:
       type: postgres
@@ -19,6 +19,6 @@ dbt_project:
       user: "{{ env_var('POSTGRES_USER') }}"
       pass: "{{ env_var('POSTGRES_PASSWORD') }}"
       dbname: "{{ env_var('POSTGRES_DB') }}"
-      schema: "public"
+      schema: "raw"
 
   target: dev

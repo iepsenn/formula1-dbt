@@ -26,6 +26,18 @@
             "type": "python"
         },
         {
+            "name": "dbt: build",
+            "request": "launch",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "program": "${cwd}/.vscode/run_container.py",
+            "args": [
+                "dbt",
+                "build"
+            ],
+            "type": "python"
+        },
+        {
             "name": "dbt: docs generate",
             "request": "launch",
             "console": "integratedTerminal",
@@ -35,6 +47,19 @@
                 "dbt",
                 "docs",
                 "generate"
+            ],
+            "type": "python"
+        },
+        {
+            "name": "dbt: docs serve",
+            "request": "launch",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "program": "${cwd}/.vscode/run_container.py",
+            "args": [
+                "dbt",
+                "docs",
+                "serve"
             ],
             "type": "python"
         },

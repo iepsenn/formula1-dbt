@@ -1,0 +1,222 @@
+version: 2
+
+models:
+  - name: dim_circuits
+    description: '{{ doc("dim_circuits") }}'
+    columns:
+      - name: '"id"'
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_drivers
+    description: '{{ doc("dim_drivers") }}'
+    columns:
+      - name: '"id"'
+        tests:
+          - unique
+          - not_null
+      - name: '"nationalityId"'
+        tests:
+          - relationships:
+              to: ref('dim_nationality')
+              field: "id"
+
+  - name: dim_races
+    description: '{{ doc("dim_races") }}'
+    columns:
+      - name: '"id"'
+        tests:
+          - unique
+          - not_null
+      - name: '"circuitId"'
+        tests:
+          - relationships:
+              to: ref('dim_circuits')
+              field: "id"
+
+  - name: fact_constructor_results
+    description: '{{ doc("fact_constructor_results") }}'
+    columns:
+      - name: '"id"'
+        tests:
+          - unique
+          - not_null
+      - name: '"raceId"'
+        tests:
+          - relationships:
+              to: ref('dim_races')
+              field: "id"
+      - name: '"constructorId"'
+        tests:
+          - relationships:
+              to: ref('dim_constructors')
+              field: "id"
+
+  - name: fact_driver_standings
+    description: '{{ doc("fact_driver_standings") }}'
+    columns:
+      - name: '"id"'
+        tests:
+          - unique
+          - not_null
+      - name: '"raceId"'
+        tests:
+          - relationships:
+              to: ref('dim_races')
+              field: "id"
+      - name: '"driverId"'
+        tests:
+          - relationships:
+              to: ref('dim_drivers')
+              field: "id"
+
+  - name: fact_pit_stops
+    description: '{{ doc("fact_pit_stops") }}'
+    columns:
+      - name: '"raceId"'
+        tests:
+          - relationships:
+              to: ref('dim_races')
+              field: "id"
+      - name: '"driverId"'
+        tests:
+          - relationships:
+              to: ref('dim_drivers')
+              field: "id"
+
+  - name: fact_results
+    description: '{{ doc("fact_results") }}'
+    columns:
+      - name: '"id"'
+        tests:
+          - unique
+          - not_null
+      - name: '"raceId"'
+        tests:
+          - relationships:
+              to: ref('dim_races')
+              field: "id"
+      - name: '"constructorId"'
+        tests:
+          - relationships:
+              to: ref('dim_constructors')
+              field: "id"
+      - name: '"driverId"'
+        tests:
+          - relationships:
+              to: ref('dim_drivers')
+              field: "id"
+      - name: '"statusId"'
+        tests:
+          - relationships:
+              to: ref('dim_status')
+              field: "id"
+
+  - name: dim_constructors
+    description: '{{ doc("dim_constructors") }}'
+    columns:
+      - name: '"id"'
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_nationality
+    description: '{{ doc("dim_nationality") }}'
+    columns:
+      - name: '"id"'
+        tests:
+          - unique
+          - not_null
+
+  - name: '"dim_status"'
+    description: '{{ doc("dim_status") }}'
+    columns:
+      - name: '"id"'
+
+        tests:
+          - unique
+          - not_null
+
+  - name: fact_constructor_standings
+    description: '{{ doc("fact_constructor_standings") }}'
+    columns:
+      - name: '"id"'
+        tests:
+          - unique
+          - not_null
+      - name: '"raceId"'
+        tests:
+          - relationships:
+              to: ref('dim_races')
+              field: "id"
+      - name: '"constructorId"'
+        tests:
+          - relationships:
+              to: ref('dim_constructors')
+              field: "id"
+
+  - name: fact_lap_times
+    description: '{{ doc("fact_lap_times") }}'
+    columns:
+      - name: '"raceId"'
+        tests:
+          - relationships:
+              to: ref('dim_races')
+              field: "id"
+      - name: '"driverId"'
+        tests:
+          - relationships:
+              to: ref('dim_drivers')
+              field: "id"
+
+  - name: fact_qualifying
+    description: '{{ doc("fact_qualifying") }}'
+    columns:
+      - name: '"id"'
+        tests:
+          - unique
+          - not_null
+      - name: '"raceId"'
+        tests:
+          - relationships:
+              to: ref('dim_races')
+              field: "id"
+      - name: '"constructorId"'
+        tests:
+          - relationships:
+              to: ref('dim_constructors')
+              field: "id"
+      - name: '"driverId"'
+        tests:
+          - relationships:
+              to: ref('dim_drivers')
+              field: "id"
+
+  - name: fact_sprint_results
+    description: '{{ doc("fact_sprint_results") }}'
+    columns:
+      - name: '"id"'
+        tests:
+          - unique
+          - not_null
+      - name: '"raceId"'
+        tests:
+          - relationships:
+              to: ref('dim_races')
+              field: "id"
+      - name: '"constructorId"'
+        tests:
+          - relationships:
+              to: ref('dim_constructors')
+              field: "id"
+      - name: '"driverId"'
+        tests:
+          - relationships:
+              to: ref('dim_drivers')
+              field: "id"
+      - name: '"statusId"'
+        tests:
+          - relationships:
+              to: ref('dim_status')
+              field: "id"

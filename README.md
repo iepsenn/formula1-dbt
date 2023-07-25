@@ -15,3 +15,26 @@ Após todo o setup estiver pronto basta rodar o comando `dbt seed`, que irá car
 ```bash
 docker exec -it dbt dbt seed
 ```
+
+## Para rodar o projeto
+
+Rodar o comando `dbt run` para executar as transformações das tabelas do schema *raw* para *refined*:
+
+```bash
+docker exec -it dbt dbt run
+```
+
+Para validar os resultados gerados basta rodar o comando `dbt test`:
+
+```bash
+docker exec -it dbt dbt test
+```
+
+## Gerando documentação dos *models*
+
+Para gerar e servir localmente a documentação dos models, sources e macros basta rodar os comandos `dbt docs generate` e `dbt docs serve`:
+
+```bash
+docker exec -it dbt dbt docs generate
+docker exec -it dbt dbt docs serve
+```
