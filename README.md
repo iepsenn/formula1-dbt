@@ -1,5 +1,13 @@
 # formula1-dbt
 
+
+<p>
+<img alt="Docker" src="https://img.shields.io/badge/docker-%230db7ed.svg?&style=for-the-badge&logo=docker&logoColor=white"/>
+<img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white"/>
+<img alt="dbt" src="https://img.shields.io/badge/DBT-%23ff694b.svg?&style=for-the-badge&logo=dbt&logoColor=white"/>
+<img alt="Apache Superset" src="https://res.cloudinary.com/hevo/image/upload/f_auto,q_auto/v1605155218/hevo-learn/super.png" style="background-color:#468499;width:100px;height:28.5px" />
+</p>
+
 Repositorio criado para testar as funcionalidades da ferramenta dbt
 
 ## Para iniciar o projeto
