@@ -47,6 +47,30 @@ services:
       - ./dbt_project:/usr/app/
       - ./data:/usr/app/seeds/
 
+  superset:
+    build:
+      context: .
+      dockerfile: Dockerfile.superset
+      args:
+        - USER=${SUPERSET_USER}
+        - FIRSTNAME=${SUPERSET_FIRSTNAME}
+        - LASTNAME=${SUPERSET_LASTNAME}
+        - EMAIL=${SUPERSET_EMAIL}
+        - PASSWORD=${SUPERSET_PASSWORD}
+        - SUPERSET_SECRET_KEY=${SUPERSET_SECRET_KEY}
+    container_name: superset
+    networks:
+      - backend
+    depends_on:
+      - postgres
+    ports:
+      - 8081:8080
+      - 8088:8088
+    env_file:
+      - .env
+    volumes:
+      - ./superset/home:/app/superset_home
+
 volumes:
   postgres:
 

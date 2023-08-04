@@ -14,4 +14,4 @@ VOLUME /usr/app
 ENV PYTHONIOENCODING=utf-8
 ENV LANG C.UTF-8
 
-CMD [ "tail", "-f", "/dev/null"]
+CMD ["tail", "-f", "/dev/null"]
