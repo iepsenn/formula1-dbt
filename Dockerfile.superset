@@ -7,6 +7,12 @@ ARG EMAIL
 ARG PASSWORD
 ARG SUPERSET_SECRET_KEY
 
+USER root
+COPY ./superset/home /app/superset_home
+RUN chmod +x /app/superset_home
+RUN chown -R superset:superset /app/superset_home
+
+USER superset
 RUN superset fab create-admin \
     --username ${USER} \
     --firstname ${FIRSTNAME} \
